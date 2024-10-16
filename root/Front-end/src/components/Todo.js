@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import React, { useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
-
+import axios from 'axios';
 
 function Todo() {
   const [items, setItems] = useState([]);
@@ -9,10 +9,15 @@ function Todo() {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    const storedItems = JSON.parse(localStorage.getItem('todoItems'));
-    if (storedItems) {
-      setItems(storedItems);
+    // const storedItems = JSON.parse(localStorage.getItem('todoItems'));
+    const fetch= async()=>{
+      const storedItems = await axios.get('http://localhost:3003/todo');
+      console.log(storedItems.data)
+      if (storedItems.data) {
+        setItems(storedItems.data);
+      }
     }
+    fetch();
   }, []);
 
   const updateLocalStorage = (newItems) => {
@@ -27,25 +32,52 @@ function Todo() {
     updateLocalStorage(newItems);
   };
 
-  const handleclick = (id) => {
-    const listitems = items.map((item) =>
-      item.id === id ? { ...item, checked: !item.checked } : item
+  const handleclick = async (_id) => {
+    const updatedItems = items.map((item) =>
+      item._id === _id ? { ...item, checked: !item.checked } : item
     );
+   
+    const updatedItem = updatedItems.find((item) => item._id === _id);
+  
+    setItems(updatedItems); 
+    //updateLocalStorage(updatedItems);  // Optionally update localStorage
+  
+    try {
+      const response = await axios.put(`http://localhost:3003/todo/put/${_id}`, updatedItem);
+      console.log('Item updated:', response.data);
+    } catch (error) {
+      console.error('Error updating item:', error);
+    }
+  };
+  
+
+  const handledelete = async (_id) => {
+    const listitems = items.filter((item) => item._id !== _id);
     setItems(listitems);
     updateLocalStorage(listitems);
+
+    try {
+      const res=await axios.delete(`http://localhost:3003/todo/delete/${_id}`);
+      console.log("deleteddd!!!")
+    } catch (error) {
+      console.log(error);
+    }
+
   };
 
-  const handledelete = (id) => {
-    const listitems = items.filter((item) => item.id !== id);
-    setItems(listitems);
-    updateLocalStorage(listitems);
-  };
-
-  function handleSubmit(e) {
+ const  handleSubmit = async (e) =>{
     e.preventDefault();
     if (!newitems.trim()) return;
     additem(newitems);
     setNewitems('');
+    try{
+      const result=await axios.post('http://localhost:3003/todo',{
+        item:newitems,
+        checked:false
+      });
+    }catch(error){
+      console.log(error);
+    }
   }
 
   return (
@@ -93,7 +125,7 @@ function Todo() {
                   .filter((item) => item.item.toLowerCase().includes(search.toLowerCase()))
                   .map((item) => (
                     <li
-                      key={item.id}
+                      key={item._id}
                       className={`flex items-center justify-between p-4 border-b border-gray-300 transition-all duration-300 ${
                         item.checked ? 'bg-green-100' : 'hover:bg-gray-100'
                       } rounded-lg shadow-md`}
@@ -102,7 +134,7 @@ function Todo() {
                         <input
                           className="mr-4 w-5 h-5 text-blue-500 border-gray-300 rounded-full focus:ring-blue-400 transition-all duration-300 cursor-pointer"
                           type="checkbox"
-                          onChange={() => handleclick(item.id)}
+                          onChange={() => handleclick(item._id)}
                           checked={item.checked}
                         />
                         <label
@@ -115,7 +147,7 @@ function Todo() {
                       </div>
                       <FaTrash
                         className="text-red-500 cursor-pointer transition-transform transform duration-300 hover:scale-110"
-                        onClick={() => handledelete(item.id)}
+                        onClick={() => handledelete(item._id)}
                       />
                     </li>
                   ))}

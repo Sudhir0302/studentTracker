@@ -9,8 +9,8 @@ const PORT = 3003;
 app.use(cors());
 app.use(bodyParser.json());
 
-
-mongoose.connect('mongodb+srv://sudhirpld2020:valarmathi@teacher.ntuu0.mongodb.net/Teacher?retryWrites=true&w=majority&appName=Teacher', {
+//mongodb+srv://sudhirpld2020:valarmathi@teacher.ntuu0.mongodb.net/Teacher?retryWrites=true&w=majority&appName=Teacher
+mongoose.connect('mongodb://localhost:27017/teacher', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -23,28 +23,35 @@ db.once('open', () => {
     console.log("Connected to MongoDB");
 });
 
-const Attendance = require('./models/attendance');
+const Attendance = require('./routes/AttendanceRoute');
+const uploadRoutes = require('./routes/uploadRoutes'); 
+const todoRoute=require('./routes/todoRoute');
 
 
-app.post('/api/attendance', async (req, res) => {
-    try {
-      const attendanceData = req.body;
-      const savedData = await Attendance.insertMany(attendanceData);
-      res.status(200).json(savedData);
-    } catch (error) {
-      console.error('Error saving attendance:', error);
-      res.status(400).json({ message: 'Error saving attendance', error });
-    }
-  });
+app.use('/attendance',Attendance);
+app.use('/api', uploadRoutes);
+app.use('/todo',todoRoute);
+
+
+// app.post('/api', async (req, res) => {
+//     try {
+//       const attendanceData = req.body;
+//       const savedData = await Attendance.insertMany(attendanceData);
+//       res.status(200).json(savedData);
+//     } catch (error) {
+//       console.error('Error saving attendance:', error);
+//       res.status(400).json({ message: 'Error saving attendance', error });
+//     }
+//   });
   
-app.get('/api/attendance',async(req,res)=>{
-    try{
-        const data=await Attendance.find();
-        res.status(200).json(data);
-    }catch(error){
-        res.status(500).send(error);
-    }
-})
+// app.get('/api',async(req,res)=>{
+//     try{
+//         const data=await Attendance.find();
+//         res.status(200).json(data);
+//     }catch(error){
+//         res.status(500).send(error);
+//     }
+// })
 
 app.get('/', (req, res) => {
     res.send("Hello");

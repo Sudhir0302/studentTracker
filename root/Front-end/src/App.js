@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import Todo from './Todo/src/App';
+// import Todo from './Todo/src/App';
+import Todo from './components/Todo'
 import Home from './home';
 import TeacherDashboard from './TeacherDashboard';
 import Timetable from './Timetable';

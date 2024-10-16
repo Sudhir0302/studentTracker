@@ -11,7 +11,7 @@ const Attendance = () => {
   const [add, setAdd] = useState("");
   const [presentCount, setPresentCount] = useState(0);
   const [absentCount, setAbsentCount] = useState(0);
-  const [regno,setRegno]=useState();
+  const [regno,setRegno]=useState("");
   // const [post, setPost] = useState(false);
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
 
@@ -45,11 +45,11 @@ const Attendance = () => {
   useEffect(() => {
     const fetchAttendanceData = async () => {
       try {
-        const response = await axios.get('http://localhost:3003/api/attendance');
+        const response = await axios.get('http://localhost:3003/attendance');
         const modifiedData = response.data.map(student => {
           return {
             ...student,
-            present: null, 
+            present: false, 
           };
         });
         setStud(modifiedData);
@@ -69,13 +69,14 @@ const Attendance = () => {
           name: s.name,
           className: s.className,
           subject: s.subject,
+          regno:s.regno,
           present: s.present !== undefined ? s.present : false,
         }))
         .filter(s => s.className && s.present !== undefined);
 
       console.log('Attendance Data:', attendanceData);
 
-      axios.post('http://localhost:3003/api/attendance', attendanceData)
+      axios.post('http://localhost:3003/attendance', attendanceData)
         .then(response => {
           console.log('Data sent successfully:', response.data);
         })
@@ -112,6 +113,12 @@ const Attendance = () => {
 
   function handleSubmit(e) {
     e.preventDefault();
+    for(let data of stud){
+      if(data.regno===regno){
+        alert("regno already exits")
+        return;
+      }
+    }
     const newId = stud.length + 1;
     const newStud = {
       id: newId,
@@ -174,6 +181,7 @@ const Attendance = () => {
               value={regno}
               onChange={(e) => setRegno(e.target.value)}
               className='bg-gray-200 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500'
+              required
             />
           </div>
           <button className='bg-green-400 text-white p-2 rounded-md hover:bg-green-700 transition duration-300'>
@@ -204,8 +212,8 @@ const Attendance = () => {
       <div className='flex justify-center flex-col items-center bg-white w-full max-w-lg h-60 m-1 text-xl p-4 overflow-auto rounded-lg shadow-md'>
         <ol className='list-decimal space-y-4 w-full text-center'>
           {stud.length > 0 ? (
-            stud.map((data) => (
-              <li key={data.id} className='flex justify-between items-center'>
+            stud.map((data,index) => (
+              <li key={index} className='flex justify-between items-center'>
                 <span className='text-lg text-gray-800'>{data.regno} - {data.name} </span>
                 <div className='flex gap-4'>
                   <button

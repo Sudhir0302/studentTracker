@@ -6,7 +6,7 @@ const Timetable = () => {
   const subjects=['CD','DSA','EE','MERN','EVS'];
   return (
     <div className="container mx-auto mt-8">
-      <h2 className="text-center text-2xl font-bold mb-6">Class Timetable</h2>
+      <h2 className="text-center text-2xl font-bold mb-6">Teacher's Timetable</h2>
       <div className="overflow-x-auto">
         <table className="table-auto w-full border-collapse border border-gray-300">
           <thead>
@@ -18,11 +18,11 @@ const Timetable = () => {
             </tr>
           </thead>
           <tbody>
-            {periods.map((period) => (
-              <tr key={period}>
+            {periods.map((period,index) => (
+              <tr key={index}>
                 <td className="border border-gray-300 p-2 text-center">{period}</td>
-                {subjects.map((sub)=>(
-                    <td>{sub}</td>
+                {subjects.map((sub,index)=>(
+                    <td key={index}>{sub}</td>
                 ))}
               </tr>
             ))}

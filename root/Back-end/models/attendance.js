@@ -20,13 +20,16 @@ const attendanceSchema=new mongoose.Schema({
     regno:{
         type: String,
         required: true,
+        unique: true
     },
     date: {
         type: Date,
         default: Date.now
     }
+},{
+    _id:false
 });
 
-const Attendance = mongoose.model('Attendance', attendanceSchema);
+const attendance = mongoose.model('attendance', attendanceSchema);
 
-module.exports = Attendance;
+module.exports = attendance;

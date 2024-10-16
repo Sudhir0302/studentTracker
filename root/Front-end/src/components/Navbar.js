@@ -1,32 +1,36 @@
-import React from 'react'
-import {useNavigate } from 'react-router-dom'
-// import Home from '../home';
-// import Login from '../login';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
-    const navigate=useNavigate();
-  return (
-    <>
-        <nav className='bg-green-200 w-full h-9 mt-0 flex justify-between text-lg'>
-            <div className=''>
-                <h1>
-                    TeacherDashboard
-                </h1>
-            </div>
-            <div className='flex justify-normal gap-3 mr-9 list-none'>
-                <li onClick={()=>navigate('/Home')}>
-                    Home
-                </li>
-                <li onClick={()=>navigate('/Todo')}>
-                    Todo
-                </li>
-                <li>
-                    Contact
-                </li>
-            </div>
-        </nav>
-    </>
-  )
-}
+  const navigate = useNavigate();
 
-export default Navbar
+  return (
+    <nav className="bg-green-500 w-full h-12 flex justify-between items-center px-6 shadow-md">
+      <div className="text-white font-bold text-xl">
+        <h1>TeacherDashboard</h1>
+      </div>
+
+      <ul className="flex gap-6 list-none items-center">
+        <li
+          className="text-white hover:bg-green-600 px-4 py-2 rounded-md cursor-pointer transition duration-300"
+          onClick={() => navigate('/Home')}
+        >
+          Home
+        </li>
+        <li
+          className="text-white hover:bg-green-600 px-4 py-2 rounded-md cursor-pointer transition duration-300"
+          onClick={() => navigate('/Todo')}
+        >
+          Todo
+        </li>
+        <li
+          className="text-white hover:bg-green-600 px-4 py-2 rounded-md cursor-pointer transition duration-300"
+        >
+          Contact
+        </li>
+      </ul>
+    </nav>
+  );
+};
+
+export default Navbar;

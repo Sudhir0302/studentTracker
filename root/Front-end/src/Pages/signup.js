@@ -5,7 +5,7 @@ const Signup = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("student");
-
+  const[dept,setDept]=useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Username:", Email);
@@ -42,6 +42,18 @@ const Signup = () => {
               required
             />
           </div>
+          
+          <div className="mb-4">
+            <label className="block mb-2 text-sm font-medium text-gray-600">Department</label>
+            <input
+              type="text"
+              value={dept}
+              onChange={(e) => setDept(e.target.value)}
+              className="w-full px-4 py-2 text-gray-700 bg-gray-200 rounded focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+
           <div className="mb-4">
             <label className="block mb-2 text-sm font-medium text-gray-600">Password</label>
             <input
