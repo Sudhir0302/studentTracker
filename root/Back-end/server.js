@@ -26,12 +26,12 @@ db.once('open', () => {
 const Attendance = require('./routes/AttendanceRoute');
 const uploadRoutes = require('./routes/uploadRoutes'); 
 const todoRoute=require('./routes/todoRoute');
-
+const userRoute=require('./routes/userRoute');
 
 app.use('/attendance',Attendance);
 app.use('/api', uploadRoutes);
 app.use('/todo',todoRoute);
-
+app.use('/user',userRoute);
 
 // app.post('/api', async (req, res) => {
 //     try {
