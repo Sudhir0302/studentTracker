@@ -1,19 +1,52 @@
+import axios from "axios";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  const [Email,setEmail] = useState("");
+  const [email,setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("student");
   const[dept,setDept]=useState("");
-  const handleSubmit = (e) => {
+  const[regno,setRegno]=useState("");
+  const[section,setSection]=useState("");
+  const[year,setYear]=useState("");
+  const [error, setError] = useState('');
+
+  const navigate=useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Username:", Email);
+    console.log("Usermail:", email);
     console.log("Username:", username);
     console.log("Password:", password);
+    console.log("dept: ",dept);
+    console.log("section: ",section);
+    console.log("regno: ",regno);
+    console.log("year: ",year);
     console.log("Role:", role); 
     setUsername("");
     setPassword("");
+    setDept("");
+    setRegno("");
+    setEmail("");
+    setSection("");
+    setYear("");
+
+    try{
+      const res=await axios.post('http://localhost:3003/user',{email,username,regno,password,role,dept,section,year})
+      setTimeout(() => {  
+        // handleLogin();
+        navigate('/');
+      }, 1500);
+    }catch(err){
+      console.log(err);
+      if (err.response && err.response.data) {
+        setError(err.response.data.message);
+      } else {
+        setError('Login failed. Please try again.');
+      }
+    }
   };
 
   return (
@@ -26,7 +59,7 @@ const Signup = () => {
             <input
             type="text"
             placeholder="Enter your mailid"
-            value={Email}
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-2 text-gray-700 bg-gray-200 rounded focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500"
             required
@@ -53,7 +86,41 @@ const Signup = () => {
               required
             />
           </div>
+          {role==='student'&&<>
+          <div className="mb-4">
+            <label className="block mb-2 text-sm font-medium text-gray-600">Section</label>
+            <input
+              type="text"
+              value={section}
+              onChange={(e) => setSection(e.target.value)}
+              className="w-full px-4 py-2 text-gray-700 bg-gray-200 rounded focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500"
+             // required
+            />
+          </div>
 
+          <div className="mb-4">
+            <label className="block mb-2 text-sm font-medium text-gray-600">Year</label>
+            <input
+              type="text"
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
+              className="w-full px-4 py-2 text-gray-700 bg-gray-200 rounded focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500"
+              //required
+            />
+          </div>
+          
+          <div className="mb-4">
+            <label className="block mb-2 text-sm font-medium text-gray-600">Regno</label>
+            <input
+              type="text"
+              value={regno}
+              onChange={(e) => setRegno(e.target.value)}
+              className="w-full px-4 py-2 text-gray-700 bg-gray-200 rounded focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500"
+             // required
+            />
+          </div>
+          </>
+            }
           <div className="mb-4">
             <label className="block mb-2 text-sm font-medium text-gray-600">Password</label>
             <input
@@ -75,7 +142,7 @@ const Signup = () => {
             >
               <option value="student">Student</option>
               <option value="teacher">Teacher</option>
-              <option value="parent">Parent</option>
+              {/* <option value="parent">Parent</option> */}
             </select>
           </div>
 
@@ -85,6 +152,7 @@ const Signup = () => {
           >
             Create Account
           </button>
+          {error && <div className="text-red-500 text-center">{error}</div>}
         </form>
       </div>
     </div>

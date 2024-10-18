@@ -5,22 +5,22 @@ import Collections from './components/Collections';
 import axios from 'axios';
 import { useAuth } from './context/AuthContext';
 
-function TeacherDashboard() {
+function StudentDashboard() {
   const [works, setWorks] = useState([]);
 
   const {user,setUser} =useAuth();
-  
+ 
   useEffect(() => {
     const fetch = async () => {
       const res = await axios.get('http://localhost:3003/todo');
       setWorks(res.data);
-      
+
       const savedUser = sessionStorage.getItem('user');
 
       if (savedUser) {
-        setUser(JSON.parse(savedUser));
+         setUser(JSON.parse(savedUser));
       }
-
+      
     };
     fetch();
   }, []);
@@ -35,9 +35,9 @@ function TeacherDashboard() {
             className="w-[60%] h-auto rounded-full mx-auto border-2 border-gray-300"
           />
           <div className="mt-4 text-left">
-            <h1 className="text-xl font-semibold text-gray-800 mb-2">Teacher Details</h1>
+            <h1 className="text-xl font-semibold text-gray-800 mb-2">Student Details</h1>
             <h2 className="text-md text-gray-600 mb-1">
-              <span className="font-medium">Name:</span> {user ? user.toUpperCase() : "teacher"}
+              <span className="font-medium">Name:</span> {user ? user.toUpperCase() : "student"}
             </h2>
             <h2 className="text-md text-gray-600 mb-1">
               <span className="font-medium">Department:</span> Computer Science
@@ -75,16 +75,4 @@ function TeacherDashboard() {
   );
 }
 
-export default TeacherDashboard;
-
-
- // const navigate =useNavigate();
-    // function handleclick(){
-    //     navigate('/Todo');
-    // }
-    // function Attend(){
-    //   navigate('/Attendance');
-    // }
-    // function time(){
-    //   navigate('/Timetable');
-    // }
+export default StudentDashboard;
