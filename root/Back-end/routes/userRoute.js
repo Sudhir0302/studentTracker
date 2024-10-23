@@ -55,7 +55,7 @@ router.post('/signin', async (req, res) => {
     }
 
     console.log('Signin successful');
-    res.status(200).json({ message: 'Signin successful' ,user:userdata.username});
+    res.status(200).json({ message: 'Signin successful' ,user:userdata});
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Error signing in' });

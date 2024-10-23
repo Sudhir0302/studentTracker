@@ -1,7 +1,10 @@
 const mongoose=require('mongoose');
 
 const pdfSchema = new mongoose.Schema({
-    title: String,
+    regno: String,
+    dept:String,
+    section:String,
+    subject: String,
     file: {
         data: Buffer,
         contentType: String,

@@ -27,11 +27,15 @@ const Attendance = require('./routes/AttendanceRoute');
 const uploadRoutes = require('./routes/uploadRoutes'); 
 const todoRoute=require('./routes/todoRoute');
 const userRoute=require('./routes/userRoute');
+const studentRoute=require('./routes/studentdbRoute');
+const notificationsRoute=require('./routes/notificationsRoute');
 
 app.use('/attendance',Attendance);
 app.use('/api', uploadRoutes);
 app.use('/todo',todoRoute);
 app.use('/user',userRoute);
+app.use('/student',studentRoute);
+app.use('/note',notificationsRoute);
 
 // app.post('/api', async (req, res) => {
 //     try {

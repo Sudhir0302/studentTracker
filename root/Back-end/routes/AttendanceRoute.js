@@ -37,4 +37,36 @@ router.get('/',async(req,res)=>{
     }
 })
 
+router.get('/percentage', async (req, res) => {
+    try {
+        const { className, regno, subject } = req.query;
+
+        if (!className || !regno || !subject) {
+            return res.status(400).json({ message: 'className, regno, and subject are required' });
+        }
+
+        const totalClasses = await attendance.countDocuments({ className, regno, subject });
+
+        if (totalClasses === 0) {
+            return res.status(404).json({ message: 'No attendance records found for this student' });
+        }
+
+        const presentCount = await attendance.countDocuments({ className, regno, subject, present: true });
+
+        const attendancePercentage = (presentCount / totalClasses) * 100;
+
+        res.status(200).json({
+            regno,
+            className,
+            subject,
+            totalClasses,
+            presentCount,
+            attendancePercentage: attendancePercentage.toFixed(2) 
+        });
+    } catch (error) {
+        console.error('Error calculating attendance percentage:', error);
+        res.status(500).json({ message: 'Error calculating attendance percentage', error });
+    }
+});
+
 module.exports=router
