@@ -8,19 +8,19 @@ import { useAuth } from './context/AuthContext';
 function StudentDashboard() {
   const [works, setWorks] = useState([]);
 
-  const {user,setUser} =useAuth();
+  const {user} =useAuth();
  
   useEffect(() => {
     const fetch = async () => {
       const res = await axios.get('http://localhost:3003/todo');
       setWorks(res.data);
 
-      const savedUser = sessionStorage.getItem('user');
+      // const savedUser = sessionStorage.getItem('user');
 
-      if (savedUser) {
-         setUser(JSON.parse(savedUser));
-      }
-      
+      // if (savedUser) {
+      //    setUser(JSON.parse(savedUser));
+      // }
+      // console.log(user)
     };
     fetch();
   }, []);
@@ -37,7 +37,7 @@ function StudentDashboard() {
           <div className="mt-4 text-left">
             <h1 className="text-xl font-semibold text-gray-800 mb-2">Student Details</h1>
             <h2 className="text-md text-gray-600 mb-1">
-              <span className="font-medium">Name:</span> {user ? user.toUpperCase() : "student"}
+              <span className="font-medium">Name:</span> {user ? user.username.toUpperCase() : "student"}
             </h2>
             <h2 className="text-md text-gray-600 mb-1">
               <span className="font-medium">Department:</span> Computer Science

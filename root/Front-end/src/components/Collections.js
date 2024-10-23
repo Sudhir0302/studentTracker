@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 
 
 const Collections = () => {
-
+  // ()=>navigate('/Notifications')
   const { stud } = useAuth();
 
   const navigate=useNavigate();
@@ -24,6 +24,14 @@ const Collections = () => {
       navigate('/TeacherAssing');
     }
   }
+
+  function handleNote() {
+    if (stud === 'student') {
+      navigate('/noteifystud');
+    } else {
+      navigate('/Notifications');
+    }
+  }
   
   
   return (
@@ -35,17 +43,17 @@ const Collections = () => {
           ATTENDENCE
         </button>
       </div>
-
+      {/* noteifystud */}
       <div className='bg-gray-100 w-[45%] p-4 text-center m-2'>
         <button 
-          onClick={()=>alert('meet')}>
+          onClick={handleNote}>  
           Notifications
           </button>
       </div>
 
       <div className='bg-gray-100 w-[45%] p-4 text-center m-2'>
         <button 
-          onClick={()=>alert('meet')}>
+          onClick={()=>alert('rewardss')}>  
           Rewards
         </button>
       </div>

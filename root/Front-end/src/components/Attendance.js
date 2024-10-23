@@ -6,46 +6,19 @@ import axios from 'axios';
 const Attendance = () => {
   // States
   const [stud, setStud] = useState([]);
+  const [filteredStud, setFilteredStud] = useState([]);
   const [class1, setClass1] = useState("");
   const [subject, setSubject] = useState("");
   const [add, setAdd] = useState("");
   const [presentCount, setPresentCount] = useState(0);
   const [absentCount, setAbsentCount] = useState(0);
   const [regno,setRegno]=useState("");
-  // const [post, setPost] = useState(false);
-  const [showModal, setShowModal] = useState(false); // State to control modal visibility
-
-  // useEffect(() => {
-  //   if (stud.length > 0) {
-  //     const attendanceData = stud
-  //       .map(s => ({
-  //         name: s.name,
-  //         className: s.className,
-  //         subject: s.subject,
-  //         present: s.present !== undefined ? s.present : false,
-  //       }))
-  //       .filter(s => s.className && s.present !== undefined);
-
-  //     console.log('Attendance Data:', attendanceData);
-
-  //     axios.post('http://localhost:3003/api/attendance', attendanceData)
-  //       .then(response => {
-  //         console.log('Data sent successfully:', response.data);
-  //       })
-  //       .catch(error => {
-  //         console.error('Error saving attendance:', error.message);
-  //         if (error.errors) {
-  //           console.error('Validation errors:', error.errors);
-  //         }
-  //       });
-  //   }
-  // }, [post]);
-
+  const [showModal, setShowModal] = useState(false); 
 
   useEffect(() => {
     const fetchAttendanceData = async () => {
       try {
-        const response = await axios.get('http://localhost:3003/attendance');
+        const response = await axios.get('http://localhost:3003/student ');
         const modifiedData = response.data.map(student => {
           return {
             ...student,
@@ -61,6 +34,10 @@ const Attendance = () => {
     console.log(stud);
   }, []);
 
+  useEffect(() => {
+    const filteredData = stud.filter(student => student.className.toLowerCase() === class1.toLowerCase());
+    setFilteredStud(filteredData);
+  }, [class1, stud,subject]);
 
   function post(){
     if (stud.length > 0) {
@@ -68,7 +45,7 @@ const Attendance = () => {
         .map(s => ({
           name: s.name,
           className: s.className,
-          subject: s.subject,
+          subject: subject,
           regno:s.regno,
           present: s.present !== undefined ? s.present : false,
         }))
@@ -86,6 +63,7 @@ const Attendance = () => {
             console.error('Validation errors:', error.errors);
           }
         });
+
     }
   }
 
@@ -94,7 +72,9 @@ const Attendance = () => {
     if (stud[index].present === false || stud[index].present === null) {
       stud[index].present = true;
       setPresentCount(presentCount+1);
-      setAbsentCount(absentCount-1);
+      if(absentCount>0){
+         setAbsentCount(absentCount-1);
+      }
       setStud([...stud]);
     }
   }
@@ -113,9 +93,9 @@ const Attendance = () => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    for(let data of stud){
-      if(data.regno===regno){
-        alert("regno already exits")
+    for (let data of stud) {
+      if (data.regno === regno && data.subject.toLowerCase() === subject.toLowerCase()) {
+        alert("This regno already exists for the selected subject");
         return;
       }
     }
@@ -123,7 +103,7 @@ const Attendance = () => {
     const newStud = {
       id: newId,
       name: add.toUpperCase(),
-      present: null,
+      present: false,
       className: class1.toUpperCase(),
       subject: subject.toUpperCase(),
       regno: regno
@@ -163,7 +143,7 @@ const Attendance = () => {
               className='bg-gray-200 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500'
             />
           </div>
-          <div className='flex flex-col'>
+          {/* <div className='flex flex-col'>
             <label className='text-sm font-semibold text-gray-600'>Add Students:</label>
             <input
               placeholder='Add student name'
@@ -172,8 +152,8 @@ const Attendance = () => {
               onChange={(e) => setAdd(e.target.value)}
               className='bg-gray-200 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500'
             />
-          </div>
-          <div className='flex flex-col'>
+          </div> */}
+          {/* <div className='flex flex-col'>
             <label className='text-sm font-semibold text-gray-600'>Add Regno:</label>
             <input
               placeholder='Enter Student Regno'
@@ -183,7 +163,7 @@ const Attendance = () => {
               className='bg-gray-200 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500'
               required
             />
-          </div>
+          </div> */}
           <button className='bg-green-400 text-white p-2 rounded-md hover:bg-green-700 transition duration-300'>
             ADD
           </button>
@@ -211,8 +191,8 @@ const Attendance = () => {
       </div>
       <div className='flex justify-center flex-col items-center bg-white w-full max-w-lg h-60 m-1 text-xl p-4 overflow-auto rounded-lg shadow-md'>
         <ol className='list-decimal space-y-4 w-full text-center'>
-          {stud.length > 0 ? (
-            stud.map((data,index) => (
+          {filteredStud.length > 0 ? (
+            filteredStud.map((data,index) => (
               <li key={index} className='flex justify-between items-center'>
                 <span className='text-lg text-gray-800'>{data.regno} - {data.name} </span>
                 <div className='flex gap-4'>

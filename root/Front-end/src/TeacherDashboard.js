@@ -7,27 +7,24 @@ import { useAuth } from './context/AuthContext';
 
 function TeacherDashboard() {
   const [works, setWorks] = useState([]);
+  const { user} = useAuth();
 
-  const {user,setUser} =useAuth();
-  
   useEffect(() => {
     const fetch = async () => {
       const res = await axios.get('http://localhost:3003/todo');
       setWorks(res.data);
-      
-      const savedUser = sessionStorage.getItem('user');
 
-      if (savedUser) {
-        setUser(JSON.parse(savedUser));
-      }
-
+      // const savedUser = sessionStorage.getItem('user');
+      // if (savedUser) {
+      //   setUser(JSON.parse(savedUser));
+      // }
     };
     fetch();
   }, []);
 
   return (
     <>
-      <div className="flex justify-between flex-row w-full h-auto bg-gray-50 p-6 rounded-lg shadow-lg">
+      <div className="flex flex-col md:flex-row justify-between w-full h-auto bg-gray-50 p-6 rounded-lg shadow-lg space-y-6 md:space-y-0">
         <div className="flex flex-col w-full md:w-[30%] bg-white p-4 rounded-lg shadow-md">
           <img
             src={profile}
@@ -37,7 +34,7 @@ function TeacherDashboard() {
           <div className="mt-4 text-left">
             <h1 className="text-xl font-semibold text-gray-800 mb-2">Teacher Details</h1>
             <h2 className="text-md text-gray-600 mb-1">
-              <span className="font-medium">Name:</span> {user ? user.toUpperCase() : "teacher"}
+              <span className="font-medium">Name:</span> {user ? user.username.toUpperCase() : "teacher"}
             </h2>
             <h2 className="text-md text-gray-600 mb-1">
               <span className="font-medium">Department:</span> Computer Science
@@ -58,7 +55,7 @@ function TeacherDashboard() {
             <ul className="list-disc list-inside mt-3 text-gray-700">
               {works.map((data) => (
                 <li
-                  className="py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded transition duration-200 list-none text-xl"
+                  className="py-2 px-4 bg-gray-100 hover:bg-blue-500 hover:text-white transition duration-200 rounded cursor-pointer text-xl"
                   key={data._id}
                 >
                   {data.item}
@@ -76,15 +73,3 @@ function TeacherDashboard() {
 }
 
 export default TeacherDashboard;
-
-
- // const navigate =useNavigate();
-    // function handleclick(){
-    //     navigate('/Todo');
-    // }
-    // function Attend(){
-    //   navigate('/Attendance');
-    // }
-    // function time(){
-    //   navigate('/Timetable');
-    // }

@@ -13,6 +13,9 @@ import Attendance from './components/Attendance';
 import Attendancestud from './components/Attendancestud';
 import TeacherAssing from './components/TeacherAssing';
 import { AuthProvider } from './context/AuthContext';
+import StudentForm from './components/StudentForm';
+import Notifications from './components/Notifications';
+import Notifystud from './components/Notifystud';
 
 const App = () => {
   const location = useLocation();
@@ -32,8 +35,11 @@ const App = () => {
           <Route path="/Attendance" element={<Attendance />} />
           <Route path="/AttendanceStud" element={<Attendancestud />} />
           <Route path="/Assingments" element={<Assingments />} />
+          <Route path="/Notifications" element={<Notifications />} />
+          <Route path="/noteifystud" element={<Notifystud />} />
           <Route path="/TeacherAssing" element={<TeacherAssing />} />
           <Route path="/Timetable" element={<Timetable />} />
+          <Route path="/Student" element={<StudentForm />} />
         </Routes>
         {/* <h1>{props.id} : {props.name}</h1> */}
       </div>

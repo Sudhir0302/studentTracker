@@ -12,13 +12,13 @@ const Login = () => {
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
   
-  const {setStud}=useAuth();
+  const {setStud,setLogin,setUser,user}=useAuth();
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log("Username:", email);
-    console.log("Password:", password);
-    console.log("Role:", role); 
+    // console.log("Username:", email);
+    // console.log("Password:", password);
+    // console.log("Role:", role); 
     setEmail("");
     setPassword("");
 
@@ -26,9 +26,11 @@ const Login = () => {
       const res=await axios.post('http://localhost:3003/user/signin',{email,password,role});
       setSuccess('Login successful!!!');
       setStud(role);
+      setLogin(true);
      // setUser(res.data.user)
-      sessionStorage.setItem('user', JSON.stringify(res.data.user));
-      console.log(res.data.user);
+      // sessionStorage.setItem('user', JSON.stringify(res.data.user.username));
+      setUser(res.data.user);
+      // console.log("user: ",user);
       setTimeout(() => {
         // handleLogin();
         navigate('/Home');

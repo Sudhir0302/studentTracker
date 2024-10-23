@@ -58,11 +58,10 @@ function Todo() {
 
     try {
       const res=await axios.delete(`http://localhost:3003/todo/delete/${_id}`);
-      console.log("deleteddd!!!")
+      // console.log("deleteddd!!!")
     } catch (error) {
       console.log(error);
     }
-
   };
 
  const  handleSubmit = async (e) =>{
