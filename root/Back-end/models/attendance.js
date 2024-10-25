@@ -1,6 +1,6 @@
-const mongoose=require('mongoose');
+const mongoose = require('mongoose');
 
-const attendanceSchema=new mongoose.Schema({
+const attendanceSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -13,23 +13,29 @@ const attendanceSchema=new mongoose.Schema({
         type: String,
         required: true
     },
-    present:{
+    present: {
         type: Boolean,
         required: true
     },
-    regno:{
+    regno: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     date: {
         type: Date,
-        default: Date.now
+        required: true,
+        default: () => new Date().setHours(0, 0, 0, 0) // Sets date to midnight
+    },
+    timestamp: {
+        type: Date,
+        default: Date.now // Current timestamp
     }
-},{
-    _id:false
 });
 
-const attendance = mongoose.model('attendance', attendanceSchema);
+// Create a compound index to allow multiple records for the same regno on the same day
+attendanceSchema.index({ regno: 1, date: 1, subject: 1 }); // Non-unique index
 
-module.exports = attendance;
+const Attendance = mongoose.model('Attendance', attendanceSchema);
+
+
+module.exports = Attendance;

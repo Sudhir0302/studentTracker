@@ -105,4 +105,17 @@ router.delete('/pdfs/delete/:id', async (req, res) => {
     }
 });
 
+router.put('/pdfs/marks/:id', async (req, res) => {
+    const { marks } = req.body;
+    try {
+        const pdf = await PDF.findByIdAndUpdate(req.params.id, { marks }, { new: true });
+        if (!pdf) {
+            return res.status(404).send('Assignment not found');
+        }
+        res.status(200).json(pdf);
+    } catch (error) {
+        res.status(500).json({ error: 'Error updating marks' });
+    }
+});
+
 module.exports = router;

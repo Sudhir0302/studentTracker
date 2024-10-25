@@ -12,10 +12,13 @@ router.post('/', async (req, res) => {
                 return res.status(400).json({ message: 'regno is required for each record' });
             }
 
+            // Ensure the record has a date; if not, use the current date
+            const recordDate = record.date ? new Date(record.date).setHours(0, 0, 0, 0) : new Date().setHours(0, 0, 0, 0);
+
             const updateData = await attendance.findOneAndUpdate(
-                { regno: record.regno },
+                { regno: record.regno, date: recordDate },  // Check by regno and date
                 { $set: record },
-                { new: true, upsert: true }
+                { new: true, upsert: true }  // upsert will create new if not found
             );
 
             updatedData.push(updateData);
@@ -26,16 +29,27 @@ router.post('/', async (req, res) => {
         console.error('Error saving attendance:', error);
         res.status(400).json({ message: 'Error saving attendance', error });
     }
-  });   
+});
+
   
-router.get('/',async(req,res)=>{
-    try{
-        const data=await attendance.find();
+router.get('/', async (req, res) => {
+    try {
+        const { date } = req.query;
+        const query = {};
+
+        if (date) {
+            const startDate = new Date(date).setHours(0, 0, 0, 0);
+            const endDate = new Date(date).setHours(23, 59, 59, 999);
+            query.date = { $gte: startDate, $lt: endDate };  // Filter by date range
+        }
+
+        const data = await attendance.find(query);
         res.status(200).json(data);
-    }catch(error){
-        res.status(500).send(error);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching attendance', error });
     }
-})
+});
+
 
 router.get('/percentage', async (req, res) => {
     try {

@@ -8,7 +8,7 @@ const PORT = 3003;
 
 app.use(cors());
 app.use(bodyParser.json());
-
+app.use(express.urlencoded({ extended: true }));
 //mongodb+srv://sudhirpld2020:valarmathi@teacher.ntuu0.mongodb.net/Teacher?retryWrites=true&w=majority&appName=Teacher
 mongoose.connect('mongodb://localhost:27017/teacher', {
     useNewUrlParser: true,
@@ -23,6 +23,7 @@ db.once('open', () => {
     console.log("Connected to MongoDB");
 });
 
+
 const Attendance = require('./routes/AttendanceRoute');
 const uploadRoutes = require('./routes/uploadRoutes'); 
 const todoRoute=require('./routes/todoRoute');
@@ -36,6 +37,7 @@ app.use('/todo',todoRoute);
 app.use('/user',userRoute);
 app.use('/student',studentRoute);
 app.use('/note',notificationsRoute);
+app.use('/uploads', express.static('uploads'));
 
 // app.post('/api', async (req, res) => {
 //     try {
