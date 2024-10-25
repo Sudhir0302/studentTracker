@@ -1,13 +1,11 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-
+import { motion } from 'framer-motion';
 
 const Collections = () => {
-  // ()=>navigate('/Notifications')
   const { stud } = useAuth();
-
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   function handleAttend() {
     if (stud === 'student') {
@@ -16,12 +14,12 @@ const Collections = () => {
       navigate('/Attendance');
     }
   }
-  
+
   function handleAssign() {
     if (stud === 'student') {
-      navigate('/Assingments');
+      navigate('/Assignments');
     } else {
-      navigate('/TeacherAssing');
+      navigate('/TeacherAssign');
     }
   }
 
@@ -32,69 +30,32 @@ const Collections = () => {
       navigate('/Notifications');
     }
   }
-  
-  
+
   return (
     <div className='flex flex-wrap justify-between items-center bg-gray-300 p-4'>
-
-      <div className='bg-gray-100 w-[45%] p-4 text-center m-2'>
-        <button 
-          onClick={handleAttend}>
-          ATTENDENCE
-        </button>
-      </div>
-      {/* noteifystud */}
-      <div className='bg-gray-100 w-[45%] p-4 text-center m-2'>
-        <button 
-          onClick={handleNote}>  
-          Notifications
+      {[
+        { label: 'Attendance', handler: handleAttend },
+        { label: 'Notifications', handler: handleNote },
+        { label: 'Post Marks', handler: () => navigate('/Postmarks') },
+        { label: 'MEET', handler: () => alert('meet') },
+        { label: 'To-Do', handler: () => alert('meet') },
+        { label: stud === 'student' ? 'Post Assignments' : 'Review Assignments', handler: handleAssign },
+        { label: 'Details', handler: () => navigate('/Details') },
+        { label: 'Explore', handler: () => alert('meet') },
+      ].map((item, index) => (
+        <motion.div
+          key={index}
+          className='bg-gray-100 w-[45%] p-4 text-center m-2'
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <button onClick={item.handler}>
+            {item.label}
           </button>
-      </div>
+        </motion.div>
+      ))}
+    </div>
+  );
+};
 
-      <div className='bg-gray-100 w-[45%] p-4 text-center m-2'>
-        <button 
-          onClick={()=>alert('rewardss')}>  
-          Rewards
-        </button>
-      </div>
-      
-      <div className='bg-gray-100 w-[45%] p-4 text-center m-2'> 
-        <button 
-          onClick={()=>alert('meet')}>
-          MEET
-        </button>
-      </div>
-
-      <div className='bg-gray-100 w-[45%] p-4 text-center m-2'>
-        <button
-          onClick={()=>alert('meet')}>
-          To-Do
-        </button>
-      </div>
-
-      <div className='bg-gray-100 w-[45%] p-4 text-center m-2'>
-        <button  
-          onClick={handleAssign}>
-          Post assignments
-        </button>
-      </div>
-      
-      <div className='bg-gray-100 w-[45%] p-4 text-center m-2'>
-        <button 
-          onClick={()=>alert('meet')}>
-          Details
-        </button>
-      </div>
-
-      <div className='bg-gray-100 w-[45%] p-4 text-center m-2'>
-        <button 
-          onClick={()=>alert('meet')}>
-          Explore
-        </button>
-      </div>
-  </div>  
-  
-  )
-}
-
-export default Collections
+export default Collections;

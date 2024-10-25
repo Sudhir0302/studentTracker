@@ -16,6 +16,8 @@ import { AuthProvider } from './context/AuthContext';
 import StudentForm from './components/StudentForm';
 import Notifications from './components/Notifications';
 import Notifystud from './components/Notifystud';
+import Postmarks from './components/Postmarks';
+import Details from './components/Details';
 
 const App = () => {
   const location = useLocation();
@@ -40,6 +42,8 @@ const App = () => {
           <Route path="/TeacherAssing" element={<TeacherAssing />} />
           <Route path="/Timetable" element={<Timetable />} />
           <Route path="/Student" element={<StudentForm />} />
+          <Route path="/Postmarks" element={<Postmarks />} />
+          <Route path="/Details" element={<Details />} />
         </Routes>
         {/* <h1>{props.id} : {props.name}</h1> */}
       </div>

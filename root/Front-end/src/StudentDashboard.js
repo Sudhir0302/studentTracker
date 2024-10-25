@@ -42,9 +42,9 @@ function StudentDashboard() {
             <h2 className="text-md text-gray-600 mb-1">
               <span className="font-medium">Department:</span> Computer Science
             </h2>
-            <h2 className="text-md text-gray-600">
+            {/* <h2 className="text-md text-gray-600">
               <span className="font-medium">Timetable:</span> Updated
-            </h2>
+            </h2> */}
           </div>
         </div>
         <div className="flex flex-col w-full md:w-[65%] bg-white p-6 rounded-lg shadow-md">

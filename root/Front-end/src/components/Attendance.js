@@ -25,7 +25,10 @@ const Attendance = () => {
             present: false, 
           };
         });
-        setStud(modifiedData);
+        const sortedData = modifiedData.sort((a, b) => {
+          return a.regno.localeCompare(b.regno); // Assuming regno is a string
+        });
+        setStud(sortedData);
       } catch (error) {
         console.error('Error fetching attendance data:', error.message);
       }
@@ -48,6 +51,7 @@ const Attendance = () => {
           subject: subject,
           regno:s.regno,
           present: s.present !== undefined ? s.present : false,
+          date: new Date().toISOString(),
         }))
         .filter(s => s.className && s.present !== undefined);
 

@@ -39,9 +39,9 @@ function TeacherDashboard() {
             <h2 className="text-md text-gray-600 mb-1">
               <span className="font-medium">Department:</span> Computer Science
             </h2>
-            <h2 className="text-md text-gray-600">
+            {/* <h2 className="text-md text-gray-600">
               <span className="font-medium">Timetable:</span> Updated
-            </h2>
+            </h2> */}
           </div>
         </div>
         <div className="flex flex-col w-full md:w-[65%] bg-white p-6 rounded-lg shadow-md">
@@ -52,10 +52,10 @@ function TeacherDashboard() {
         <div className="flex-1 bg-white p-4 rounded-lg shadow-md">
           <h1 className="text-2xl font-semibold text-gray-800 mb-4">Works Todo</h1>
           <div className="mt-2">
-            <ul className="list-disc list-inside mt-3 text-gray-700">
+            <ul className=" list-inside mt-3 text-gray-700 list-none">
               {works.map((data) => (
                 <li
-                  className="py-2 px-4 bg-gray-100 hover:bg-blue-500 hover:text-white transition duration-200 rounded cursor-pointer text-xl"
+                  className="py-2 px-4 bg-gray-100 hover:bg-green-400 hover:text-white transition duration-200 rounded cursor-pointer text-xl"
                   key={data._id}
                 >
                   {data.item}

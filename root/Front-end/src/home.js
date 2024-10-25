@@ -10,7 +10,7 @@ const Home = () => {
   const {stud} =useAuth();
 
   return (
-    <div>
+    <div className='mb-14'>
       {stud === 'student' ? <StudentDashboard /> : <TeacherDashboard />}
     </div>
   )

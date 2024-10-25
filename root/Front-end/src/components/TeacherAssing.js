@@ -5,18 +5,16 @@ import { FaTrash } from 'react-icons/fa';
 const TeacherAssing = () => {
   const [work, setWork] = useState([]);
   const [loading, setLoading] = useState(false);
-  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pdfUrl, setPdfUrl] = useState("");
-  
-
   const [department, setDepartment] = useState("");
   const [section, setSection] = useState("");
   const [sub, setSub] = useState("");
-  
+  const [marks, setMarks] = useState({}); 
+
   const departments = ["cse", "ece", "eee"];
   const sections = ["a", "b", "c"]; 
-  const subjects = ["java", "mern", "mca"]; 
+  const subjects = ["java", "mern", "mca","ee"]; 
   
   useEffect(() => {
     if (department && section) {
@@ -24,14 +22,17 @@ const TeacherAssing = () => {
         setLoading(true);
         try {
           const response = await axios.get(`http://localhost:3003/api/pdfs/teacher`, {
-            params: { department, section ,sub}
+            params: { department, section, sub }
           });
-          if (response.data.length === 0) {
-            setWork([]); 
-            // console.log('No PDFs found for the selected department and section.');
-          } else {
-            setWork(response.data); 
-          }
+          setWork(response.data.length > 0 ? response.data : []); 
+         
+          const initialMarks = {};
+          response.data.forEach(item => {
+            if (item.marks !== undefined) {
+              initialMarks[item._id] = item.marks;
+            }
+          });
+          setMarks(initialMarks);
         } catch (err) {
           console.error('Error fetching files:', err);
         } finally {
@@ -41,7 +42,7 @@ const TeacherAssing = () => {
       
       fetchFiles();
     }
-  }, [department, section,sub]); // Dependency array includes department and section
+  }, [department, section, sub]);
 
   const handleViewPdf = (url) => {
     setPdfUrl(url);
@@ -53,14 +54,25 @@ const TeacherAssing = () => {
     setPdfUrl("");
   };
 
-  const handledelete = async (_id) => {
+  const handleDelete = async (_id) => {
     try {
-      const res=await axios.delete(`http://localhost:3003/api/pdfs/delete/${_id}`);
-      const listworks = work.filter((item) => item._id !== _id);
-      setWork(listworks);
-      console.log("deleteddd!!! :",res)
+      await axios.delete(`http://localhost:3003/api/pdfs/delete/${_id}`);
+      setWork(work.filter((item) => item._id !== _id));
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleMarksChange = (id, value) => {
+    setMarks({ ...marks, [id]: value });
+  };
+
+  const handleSubmitMarks = async (id) => {
+    try {
+      await axios.put(`http://localhost:3003/api/pdfs/marks/${id}`, { marks: marks[id] });
+      alert("Marks submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting marks:", error);
     }
   };
 
@@ -68,7 +80,7 @@ const TeacherAssing = () => {
     <div className="p-8 bg-gray-50 min-h-screen">
       <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">Assignments</h1>
       
-      {/* Dropdowns for selecting department and section */}
+     
       <div className="flex justify-center space-x-4 mb-6">
         <div>
           <label className="block text-gray-700 font-medium mb-2">Department</label>
@@ -119,30 +131,50 @@ const TeacherAssing = () => {
             <p className="text-gray-600 text-center">Loading...</p>
           ) : work.length > 0 ? (
             <ul className="space-y-4">
-              {work.map((data) => (
-                <li key={data._id} className="flex justify-between items-center bg-gray-100 p-4 rounded-md shadow-sm">
-                  <span className="text-gray-800 text-lg font-medium">{data.regno || "Untitled"} - {data.subject}</span>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => handleViewPdf(`http://localhost:3003/api/pdfs/view/${data._id}`)}
-                      className="text-blue-600 hover:underline"
-                    >
-                      View
-                    </button>
-                    <a
-                      href={`http://localhost:3003/api/pdfs/download/${data._id}`} 
-                      className="text-blue-600 hover:underline"
-                    >
-                      Download
-                    </a>
-                    <FaTrash
-                      className="text-red-500 cursor-pointer transition-transform transform duration-300 hover:scale-110"
-                      size={23}
-                      onClick={() => handledelete(data._id)}
-                    />
-                  </div>
-                </li>
-              ))}
+              {work.map((data) => {
+                const createdAtDate = new Date(data.createdAt).toISOString().split('T')[0];
+
+                return (
+                  <li key={data._id} className="flex justify-between items-center bg-gray-100 p-4 rounded-md shadow-sm">
+                    <span className="text-gray-800 text-lg font-medium">
+                      {data.regno || "Untitled"} - {data.subject}
+                    </span>
+                    <span className="text-gray-800 text-lg font-medium">Date : {createdAtDate}</span> 
+                    <div className="flex space-x-2 items-center">
+                      <input
+                        type="number"
+                        placeholder="Marks"
+                        value={marks[data._id] || ""} 
+                        onChange={(e) => handleMarksChange(data._id, e.target.value)}
+                        className="border rounded-md p-1"
+                      />
+                      <button
+                        onClick={() => handleSubmitMarks(data._id)}
+                        className="bg-blue-500 text-white px-3 py-1 rounded-md"
+                      >
+                        Submit Marks
+                      </button>
+                      <button
+                        onClick={() => handleViewPdf(`http://localhost:3003/api/pdfs/view/${data._id}`)}
+                        className="text-blue-600 hover:underline"
+                      >
+                        View
+                      </button>
+                      <a
+                        href={`http://localhost:3003/api/pdfs/download/${data._id}`} 
+                        className="text-blue-600 hover:underline"
+                      >
+                        Download
+                      </a>
+                      <FaTrash
+                        className="text-red-500 cursor-pointer transition-transform transform duration-300 hover:scale-110"
+                        size={23}
+                        onClick={() => handleDelete(data._id)}
+                      />
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           ) : (
             <h1 className="text-xl text-gray-600 text-center">No assignments available</h1>

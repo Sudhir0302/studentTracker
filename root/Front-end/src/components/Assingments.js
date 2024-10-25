@@ -5,7 +5,6 @@ import { FaTrash } from 'react-icons/fa';
 
 const Assignments = () => {
     const [work, setWork] = useState([]);
-    // const [reg, setReg] = useState("");
     const [sub, setSub] = useState("");
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -13,11 +12,11 @@ const Assignments = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [pdfUrl, setPdfUrl] = useState("");
 
-    const {user} =useAuth();
+    const { user } = useAuth();
 
     useEffect(() => {
         const fetchFiles = async () => {
-            console.log(user)
+            console.log(user);
             setLoading(true);
             setError("");
             try {
@@ -46,6 +45,7 @@ const Assignments = () => {
         formData.append('regno', user.regno);
         formData.append('dept', user.dept);
         formData.append('section', user.section);
+
         if (sub.trim()) {
             formData.append('subject', sub); 
         }
@@ -58,7 +58,6 @@ const Assignments = () => {
             });
             setWork([...work, response.data]); 
             setFile(null);
-            // setReg("");
             setSub("");
         } catch (err) {
             console.error('Error uploading file:', err);
@@ -76,16 +75,16 @@ const Assignments = () => {
         setPdfUrl("");
     };
 
-    const handledelete = async (_id) => {
+    const handleDelete = async (_id) => {
         try {
-          const res=await axios.delete(`http://localhost:3003/api/pdfs/delete/${_id}`);
-          const listworks = work.filter((item) => item._id !== _id);
-          setWork(listworks);
-          console.log("deleteddd!!! :",res)
+            const res = await axios.delete(`http://localhost:3003/api/pdfs/delete/${_id}`);
+            const listWorks = work.filter((item) => item._id !== _id);
+            setWork(listWorks);
+            console.log("deleted!! :", res);
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      };
+    };
 
     return (
         <div className="p-8 bg-gray-50 min-h-screen">
@@ -94,13 +93,6 @@ const Assignments = () => {
             <div className="text-center my-5">
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="flex flex-col items-center space-y-4">
-                        {/* <input
-                            placeholder="Enter regno (last 3 digits)"
-                            className="bg-gray-200 text-gray-700 px-4 py-2 w-80 rounded-md border border-gray-300 focus:outline-none focus:border-blue-400"
-                            value={assg}
-                            onChange={(e) => setAssg(e.target.value)}
-                            type="text"
-                        /> */}
                         <input
                             placeholder="Subject name"
                             className="bg-gray-200 text-gray-700 px-4 py-2 w-80 rounded-md border border-gray-300 focus:outline-none focus:border-blue-400"
@@ -128,30 +120,36 @@ const Assignments = () => {
                         <p className="text-gray-600 text-center">Loading...</p>
                     ) : work.length > 0 ? (
                         <ul className="space-y-4">
-                            {work.map((data) => (
-                                <li key={data._id} className="flex justify-between items-center bg-gray-100 p-4 rounded-md shadow-sm">
-                                    <span className="text-gray-800 text-lg font-medium">{data.regno || "Untitled"} - {data.subject}</span>
-                                    <div className="flex space-x-2">
-                                        <button
-                                            onClick={() => handleViewPdf(`http://localhost:3003/api/pdfs/view/${data._id}`)}
-                                            className="text-blue-600 hover:underline"
-                                        >
-                                            View
-                                        </button>
-                                        <a
-                                            href={`http://localhost:3003/api/pdfs/download/${data._id}`} 
-                                            className="text-blue-600 hover:underline"
-                                        >
-                                            Download
-                                        </a>
-                                        <FaTrash
-                                            className="text-red-500 cursor-pointer transition-transform transform duration-300 hover:scale-110"
-                                            size={23}
-                                            onClick={() => handledelete(data._id)}
-                                        />
-                                    </div>
-                                </li>
-                            ))}
+                            {work.map((data) => {
+                                const createdAtDate = data.createdAt ? new Date(data.createdAt).toISOString().split('T')[0] : "N/A"; 
+                                return (
+                                    <li key={data._id} className="flex justify-between items-center bg-gray-100 p-4 rounded-md shadow-sm">
+                                        <span className="text-gray-800 text-lg font-medium">Regno : {data.regno || "Untitled"}</span>
+                                        <span className="text-gray-800 text-lg font-medium">Subject: {data.subject}</span>
+                                        <span className="text-gray-800 text-lg font-medium">Date: {createdAtDate}</span>
+                                        <span className="text-gray-800 text-lg font-medium">Remarks: {data.marks || "N/A"}</span>
+                                        <div className="flex space-x-2">
+                                            <button
+                                                onClick={() => handleViewPdf(`http://localhost:3003/api/pdfs/view/${data._id}`)}
+                                                className="text-blue-600 hover:underline"
+                                            >
+                                                View
+                                            </button>
+                                            <a
+                                                href={`http://localhost:3003/api/pdfs/download/${data._id}`} 
+                                                className="text-blue-600 hover:underline"
+                                            >
+                                                Download
+                                            </a>
+                                            <FaTrash
+                                                className="text-red-500 cursor-pointer transition-transform transform duration-300 hover:scale-110"
+                                                size={23}
+                                                onClick={() => handleDelete(data._id)}
+                                            />
+                                        </div>
+                                    </li>
+                                );
+                            })}
                         </ul>
                     ) : (
                         <h1 className="text-xl text-gray-600 text-center">No assignments available</h1>
