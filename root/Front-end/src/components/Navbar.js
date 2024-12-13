@@ -27,11 +27,11 @@ const Navbar = () => {
         >
           Todo
         </li>
-        <li
+        {/* <li
           className="text-white hover:bg-green-600 px-4 py-2 rounded-md cursor-pointer transition duration-300"
         >
           Contact
-        </li>
+        </li> */}
         {stud !== 'student'&&
           <li
             className="text-white hover:bg-green-600 px-4 py-2 rounded-md cursor-pointer transition duration-300"

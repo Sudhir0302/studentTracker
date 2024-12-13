@@ -1,11 +1,13 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext';
-import { motion } from 'framer-motion';
+
 
 const Collections = () => {
+  // ()=>navigate('/Notifications')
   const { stud } = useAuth();
-  const navigate = useNavigate();
+
+  const navigate=useNavigate();
 
   function handleAttend() {
     if (stud === 'student') {
@@ -14,12 +16,12 @@ const Collections = () => {
       navigate('/Attendance');
     }
   }
-
+  
   function handleAssign() {
     if (stud === 'student') {
-      navigate('/Assignments');
+      navigate('/Assingments');
     } else {
-      navigate('/TeacherAssign');
+      navigate('/TeacherAssing');
     }
   }
 
@@ -30,32 +32,69 @@ const Collections = () => {
       navigate('/Notifications');
     }
   }
-
+  
+  
   return (
     <div className='flex flex-wrap justify-between items-center bg-gray-300 p-4'>
-      {[
-        { label: 'Attendance', handler: handleAttend },
-        { label: 'Notifications', handler: handleNote },
-        { label: 'Post Marks', handler: () => navigate('/Postmarks') },
-        { label: 'MEET', handler: () => alert('meet') },
-        { label: 'To-Do', handler: () => alert('meet') },
-        { label: stud === 'student' ? 'Post Assignments' : 'Review Assignments', handler: handleAssign },
-        { label: 'Details', handler: () => navigate('/Details') },
-        { label: 'Explore', handler: () => alert('meet') },
-      ].map((item, index) => (
-        <motion.div
-          key={index}
-          className='bg-gray-100 w-[45%] p-4 text-center m-2'
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <button onClick={item.handler}>
-            {item.label}
-          </button>
-        </motion.div>
-      ))}
-    </div>
-  );
-};
 
-export default Collections;
+      <div className='bg-gray-100 w-[45%] p-4 text-center m-2 hover:scale-105 hover:ring-green-400 hover:ring-2 rounded-xl hover:shadow-green-200 shadow-xl'>
+        <button 
+          onClick={handleAttend}>
+          Attendance
+        </button>
+      </div>
+      {/* noteifystud */}
+      <div className='bg-gray-100 w-[45%] p-4 text-center m-2 hover:scale-105 hover:ring-green-400 hover:ring-2 rounded-xl hover:shadow-green-200 shadow-xl'>
+        <button 
+          onClick={handleNote}>  
+          Notifications
+          </button>
+      </div>
+
+      <div className='bg-gray-100 w-[45%] p-4 text-center m-2 hover:scale-105 hover:ring-green-400 hover:ring-2 rounded-xl hover:shadow-green-200 shadow-xl'>
+        <button 
+          onClick={()=>navigate('/Postmarks')}>  
+          Post Marks
+        </button>
+      </div>
+      
+      <div className='bg-gray-100 w-[45%] p-4 text-center m-2 hover:scale-105 hover:ring-green-400 hover:ring-2 rounded-xl hover:shadow-green-200 shadow-xl'> 
+        <button 
+          onClick={()=>alert('meet')}>
+          MEET
+        </button>
+      </div>
+
+      <div className='bg-gray-100 w-[45%] p-4 text-center m-2 hover:scale-105 hover:ring-green-400 hover:ring-2 rounded-xl hover:shadow-green-200 shadow-xl'>
+        <button
+          onClick={()=>alert('meet')}>
+          To-Do
+        </button>
+      </div>
+
+      <div className='bg-gray-100 w-[45%] p-4 text-center m-2 hover:scale-105 hover:ring-green-400 hover:ring-2 rounded-xl hover:shadow-green-200 shadow-xl'>
+        <button  
+          onClick={handleAssign}>
+          {stud ==='student' ? 'Post assignments' :"Review assignments"}
+        </button>
+      </div>
+      
+      <div className='bg-gray-100 w-[45%] p-4 text-center m-2 hover:scale-105 hover:ring-green-400 hover:ring-2 rounded-xl hover:shadow-green-200 shadow-xl'>
+        <button 
+          onClick={()=>navigate('/Details')}>
+          Details
+        </button>
+      </div>
+
+      <div className='bg-gray-100 w-[45%] p-4 text-center m-2 hover:scale-105 hover:ring-green-400 hover:ring-2 rounded-xl hover:shadow-green-200 shadow-xl'>
+        <button 
+          onClick={()=>alert('meet')}>
+          Explore
+        </button>
+      </div>
+  </div>  
+  
+  )
+}
+
+export default Collections

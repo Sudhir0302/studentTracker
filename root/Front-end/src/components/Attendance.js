@@ -3,6 +3,7 @@ import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import axios from 'axios';
 
+
 const Attendance = () => {
   // States
   const [stud, setStud] = useState([]);
@@ -18,17 +19,17 @@ const Attendance = () => {
   useEffect(() => {
     const fetchAttendanceData = async () => {
       try {
-        const response = await axios.get('http://localhost:3003/student ');
+        const response = await axios.get('http://localhost:3003/student');
         const modifiedData = response.data.map(student => {
           return {
             ...student,
             present: false, 
           };
         });
-        const sortedData = modifiedData.sort((a, b) => {
-          return a.regno.localeCompare(b.regno); // Assuming regno is a string
-        });
-        setStud(sortedData);
+        // const sortedData = modifiedData.sort((a, b) => {
+        //   return a.regno.localeCompare(b.regno); // Assuming regno is a string
+        // });
+        setStud(modifiedData);
       } catch (error) {
         console.error('Error fetching attendance data:', error.message);
       }

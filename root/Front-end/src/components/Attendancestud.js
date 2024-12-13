@@ -7,19 +7,22 @@ const Attendancestud = () => {
   const [subject, setSubject] = useState('');
   const [attendanceData, setAttendanceData] = useState(null);
   const [error, setError] = useState('');
-
+  const [startdate,setStartdate]=useState('');
+  const [enddate,setEnddate]=useState('');
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setAttendanceData(null);
-
+    console.log(startdate+" "+enddate);
     try {
       
       const response = await axios.get('http://localhost:3003/attendance/percentage', {
         params: {
           className,
           regno,
-          subject
+          subject,
+          startdate,
+          enddate
         }
       });
       setAttendanceData(response.data);
@@ -65,6 +68,28 @@ const Attendancestud = () => {
             type="text"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
+            className="w-full px-3 py-2 border rounded"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700 font-bold mb-2">StartDate</label>
+          <input 
+            type="text"
+            value={startdate}
+            onChange={(e) => setStartdate(e.target.value)}
+            className="w-full px-3 py-2 border rounded"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700 font-bold mb-2">EndDate</label>
+          <input 
+            type="text"
+            value={enddate}
+            onChange={(e) => setEnddate(e.target.value)}
             className="w-full px-3 py-2 border rounded"
             required
           />
