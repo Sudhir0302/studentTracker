@@ -8,11 +8,6 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 router.post('/upload', upload.single('pdf'), async (req, res) => {
-    // Log the incoming request for debugging
-    // console.log('File received:', req.file);
-    // console.log('Request body:', req.body);
-
-    // Check if the file is received
     if (!req.file) {
         return res.status(400).send('No file uploaded');
     }

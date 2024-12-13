@@ -32,7 +32,8 @@ const userSchema=new mongoose.Schema({
     year:{
         type:String,
         //required:true
-    }
+    },
+    profile: { type: String, default: '' },
 })
 
 const user=mongoose.model('user',userSchema);

@@ -2,14 +2,17 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-
+require('dotenv').config();
+const path = require("path");
 const app = express();
 const PORT = 3003;
-
+const DB=process.env.URI;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
-//mongodb+srv://sudhirpld2020:valarmathi@teacher.ntuu0.mongodb.net/Teacher?retryWrites=true&w=majority&appName=Teacher
+
+//mongodb://localhost:27017/teacher
+
 mongoose.connect('mongodb://localhost:27017/teacher', {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -62,6 +65,7 @@ app.use('/uploads', express.static('uploads'));
 app.get('/', (req, res) => {
     res.send("Hello");
 });
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 app.listen(PORT, () => {
