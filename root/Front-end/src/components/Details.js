@@ -15,7 +15,7 @@ const Details = () => {
         <div className="flex items-center space-x-4 mb-6">
           
           <img
-            src={user.profilePhoto || 'path/to/default-image.jpg'} 
+            src={user.profilePhoto || '/pro.png'} 
             alt={`${user.username}'s profile`}
             className="w-24 h-24 rounded-full border-4 border-gray-300 shadow-md"
           />
@@ -45,27 +45,6 @@ const Details = () => {
             <p className="text-gray-600"><strong>Biography:</strong> {user.biography || 'No biography available.'}</p>
           </div>
         )}
-
-        <div className="mt-4">
-          <h3 className="text-xl font-semibold text-gray-700">Connect with Me:</h3>
-          <div className="flex space-x-4 mt-2">
-            {user.socialLinks?.linkedin && (
-              <a href={user.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                LinkedIn
-              </a>
-            )}
-            {user.socialLinks?.github && (
-              <a href={user.socialLinks.github} target="_blank" rel="noopener noreferrer" className="text-gray-800 hover:underline">
-                GitHub
-              </a>
-            )}
-            {user.socialLinks?.twitter && (
-              <a href={user.socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
-                Twitter
-              </a>
-            )}
-          </div>
-        </div>
       </div>
     </div>
   );

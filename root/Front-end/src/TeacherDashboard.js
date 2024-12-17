@@ -8,7 +8,8 @@ import { useAuth } from './context/AuthContext';
 function TeacherDashboard() {
   const [works, setWorks] = useState([]);
   const { user} = useAuth();
-
+  const [profileImg, setProfileImg] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   useEffect(() => {
     const fetch = async () => {
       const res = await axios.get('http://localhost:3003/todo');
@@ -22,15 +23,66 @@ function TeacherDashboard() {
     fetch();
   }, []);
 
+   const fetchProfile = () => {
+      if (user && user.username) {
+        const storedImage = localStorage.getItem(`profileImage_${user.username}`);
+        if (storedImage) {
+          setProfileImg(storedImage);
+        } 
+      }
+    };
+  
+    useEffect(() => {
+      if (user && user.username) {
+        fetchProfile();
+      }
+    }, [user]);
+  
+    const handleFileChange = (e) => {
+      setSelectedFile(e.target.files[0]);
+    };
+  
+    const handleUpload = async () => {
+      if (!selectedFile || !user){ 
+        alert("upload img") 
+        return
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64Image = reader.result;
+        localStorage.setItem(`profileImage_${user.username}`, base64Image);
+        setProfileImg(base64Image);
+        alert("Profile updated successfully!");
+      };
+  
+      reader.onerror = () => {
+        alert("Error uploading profile image.");
+      };
+      reader.readAsDataURL(selectedFile);
+    };
+  
+
   return (
     <>
       <div className="flex flex-col md:flex-row justify-between w-full h-auto bg-gray-50 p-6 rounded-lg shadow-lg space-y-6 md:space-y-0">
         <div className="flex flex-col w-full md:w-[30%] bg-white p-4 rounded-lg shadow-md">
-          <img
-            src={profile}
+        <img
+            src={profileImg ? profileImg : "/pro.png"}
             alt="profile"
             className="w-[60%] h-auto rounded-full mx-auto border-2 border-gray-300"
           />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="mt-4"
+          />
+          <button
+            className="mt-2 bg-blue-500 text-white py-2 px-4 rounded"
+            onClick={handleUpload}
+          >
+            {profileImg ? "Update Profile" :"Set Profile"}
+          </button>
           <div className="mt-4 text-left">
             <h1 className="text-xl font-semibold text-gray-800 mb-2">Teacher Details</h1>
             <h2 className="text-md text-gray-600 mb-1">

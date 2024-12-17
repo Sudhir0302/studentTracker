@@ -2,68 +2,16 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 const user = require('../models/user');
-const multer = require("multer");
-const path = require("path");
-const fs = require('fs');
 
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "../uploads");
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath, { recursive: true });
-    }
-    cb(null, uploadPath);
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
-});
-const upload = multer({ storage });
 
 // router.get('/profile',(req,res)=>{
 //   console.log("set profile");
 // })
 
-router.get('/profile1', async (req, res) => {
-  const { username } = req.query;
-  try {
-    const user1 = await User.findOne({ username }); 
-    if (user1) {
-      res.status(200).json({ profile: user1.profile }); 
-    } else {
-      res.status(404).json({ message: 'User not found' });
-    }
-  } catch (err) {
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-
-router.post("/profile", upload.single("profileImage"), async (req, res) => {
-  const { username } = req.body;
-  const filePath = req.file ? `/uploads/${req.file.filename}` : null;
-  console.log("hello")
-  try {
-    if (!username || !filePath) {
-      return res.status(400).json({ error: "Invalid data" });
-    }
-
-    const user1 = await user.findOne({ username });
-    if (!user1) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    user1.profile = filePath;
-    await user1.save();
-
-    res.json({ message: "Profile image updated successfully", profile: filePath });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
-  }
-});
-
-
+router.get('/db',async(req,res)=>{
+  const data=await user.find()
+  res.status(200).json(data);
+})
 
 router.post('/', async (req, res) => {
   try {

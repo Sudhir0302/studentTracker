@@ -18,6 +18,7 @@ import Notifications from './components/Notifications';
 import Notifystud from './components/Notifystud';
 import Postmarks from './components/Postmarks';
 import Details from './components/Details';
+import Explore from './components/Explore';
 
 const App = () => {
   const location = useLocation();
@@ -44,6 +45,7 @@ const App = () => {
           <Route path="/Student" element={<StudentForm />} />
           <Route path="/Postmarks" element={<Postmarks />} />
           <Route path="/Details" element={<Details />} />
+          <Route path='/Explore' element={<Explore />} />
         </Routes>
         {/* <h1>{props.id} : {props.name}</h1> */}
       </div>

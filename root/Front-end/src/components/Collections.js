@@ -33,7 +33,17 @@ const Collections = () => {
     }
   }
   
+  function handleTodo() {
+    navigate('/Todo');
+  }
   
+  function handleMeet(){
+    window.location.href = 'https://meet.google.com/landing';
+  }
+
+  function handleExplore(){
+    navigate('/Explore');
+  }
   return (
     <div className='flex flex-wrap justify-between items-center bg-gray-300 p-4'>
 
@@ -51,23 +61,23 @@ const Collections = () => {
           </button>
       </div>
 
-      <div className='bg-gray-100 w-[45%] p-4 text-center m-2 hover:scale-105 hover:ring-green-400 hover:ring-2 rounded-xl hover:shadow-green-200 shadow-xl'>
+      {/* <div className='bg-gray-100 w-[45%] p-4 text-center m-2 hover:scale-105 hover:ring-green-400 hover:ring-2 rounded-xl hover:shadow-green-200 shadow-xl'>
         <button 
           onClick={()=>navigate('/Postmarks')}>  
           Post Marks
         </button>
-      </div>
+      </div> */}
       
       <div className='bg-gray-100 w-[45%] p-4 text-center m-2 hover:scale-105 hover:ring-green-400 hover:ring-2 rounded-xl hover:shadow-green-200 shadow-xl'> 
         <button 
-          onClick={()=>alert('meet')}>
+          onClick={handleMeet}>
           MEET
         </button>
       </div>
 
       <div className='bg-gray-100 w-[45%] p-4 text-center m-2 hover:scale-105 hover:ring-green-400 hover:ring-2 rounded-xl hover:shadow-green-200 shadow-xl'>
         <button
-          onClick={()=>alert('meet')}>
+          onClick={handleTodo}>
           To-Do
         </button>
       </div>
@@ -88,7 +98,7 @@ const Collections = () => {
 
       <div className='bg-gray-100 w-[45%] p-4 text-center m-2 hover:scale-105 hover:ring-green-400 hover:ring-2 rounded-xl hover:shadow-green-200 shadow-xl'>
         <button 
-          onClick={()=>alert('meet')}>
+          onClick={handleExplore}>
           Explore
         </button>
       </div>

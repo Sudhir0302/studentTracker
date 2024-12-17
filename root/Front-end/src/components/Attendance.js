@@ -39,9 +39,13 @@ const Attendance = () => {
   }, []);
 
   useEffect(() => {
-    const filteredData = stud.filter(student => student.className.toLowerCase() === class1.toLowerCase());
-    setFilteredStud(filteredData);
-  }, [class1, stud,subject]);
+   if (class1.trim()) {
+      const filteredData = stud.filter(student => student.className.toLowerCase() === class1.toLowerCase());
+      setFilteredStud(filteredData);
+      setAbsentCount(filteredData.length);
+      console.log(filteredData)
+    }
+  }, [class1]);
 
   function post(){
     if (stud.length > 0) {
@@ -196,7 +200,7 @@ const Attendance = () => {
       </div>
       <div className='flex justify-center flex-col items-center bg-white w-full max-w-lg h-60 m-1 text-xl p-4 overflow-auto rounded-lg shadow-md'>
         <ol className='list-decimal space-y-4 w-full text-center'>
-          {filteredStud.length > 0 ? (
+          {filteredStud.length >0 ? (
             filteredStud.map((data,index) => (
               <li key={index} className='flex justify-between items-center'>
                 <span className='text-lg text-gray-800'>{data.regno} - {data.name} </span>
