@@ -95,13 +95,14 @@ const Collections = () => {
           Details
         </button>
       </div>
-
-      <div className='bg-gray-100 w-[45%] p-4 text-center m-2 hover:scale-105 hover:ring-green-400 hover:ring-2 rounded-xl hover:shadow-green-200 shadow-xl'>
-        <button 
-          onClick={handleExplore}>
-          Explore
-        </button>
-      </div>
+      {stud !=='student' &&
+        <div className='bg-gray-100 w-[45%] p-4 text-center m-2 hover:scale-105 hover:ring-green-400 hover:ring-2 rounded-xl hover:shadow-green-200 shadow-xl flex justify-center items-centerx'>
+          <button 
+            onClick={handleExplore}>
+            Explore
+          </button>
+        </div>
+      }
   </div>  
   
   )
